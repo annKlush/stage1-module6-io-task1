@@ -7,7 +7,6 @@ public class FileReader {
 
     public Profile getDataFromFile(File file) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
-            // Step 1: Reading file data into a string
             StringBuilder fileContent = new StringBuilder();
 
             String line;
@@ -21,7 +20,7 @@ public class FileReader {
             int age = 0;
             String email = "";
             long phone = 0;
-
+            Profile pr=new Profile();
             for (String lineData : lines) {
                 String[] keyValue = lineData.split(":");
                 String key = keyValue[0].trim();
@@ -29,24 +28,22 @@ public class FileReader {
 
                 switch (key) {
                     case "Name":
-                        name = value;
+                        pr.setName(value);
                         break;
                     case "Age":
-                        age = Integer.parseInt(value);
+                        pr.setAge(Integer.parseInt(value));
                         break;
                     case "Email":
-                        email = value;
+                        pr.setEmail(value);
                         break;
                     case "Phone":
-                        phone = Long.parseLong(value);
+                        pr.setPhone(Long.parseLong(value));
                         break;
                     default:
-                        // Handle any other keys, if needed
                         break;
                 }
             }
-
-            return new Profile(name, age, email, phone);
+            return pr;
 
         } catch (IOException e) {
             e.printStackTrace();
