@@ -7,16 +7,16 @@ public class FileReader {
 
     public Profile getDataFromFile(File file) {
         Profile profile = null;
+        BufferedReader br = null;
         try {
             StringBuilder fileContent = new StringBuilder();
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+
             String line;
             while ((line = br.readLine()) != null) {
                 fileContent.append(line).append("\n");
             }
-            br.close();
 
-            // Step 2: Parse the string for key-value pairs
             String profileData = fileContent.toString();
             String[] lines = profileData.split("\n");
             String name = "";
@@ -40,17 +40,25 @@ public class FileReader {
                         email = value;
                         break;
                     case "Phone":
-                        phone = Integer.parseInt(value);
+                        phone = Long.parseLong(value);
                         break;
                     default:
-                        // Handle any other keys, if needed
                         break;
                 }
             }
+
             profile = new Profile(name, age, email, phone);
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return profile;
