@@ -6,11 +6,9 @@ import java.io.*;
 public class FileReader {
 
     public Profile getDataFromFile(File file) {
-        Profile profile = null;
-        BufferedReader br = null;
-        try {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+            // Step 1: Reading file data into a string
             StringBuilder fileContent = new StringBuilder();
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -43,24 +41,17 @@ public class FileReader {
                         phone = Long.parseLong(value);
                         break;
                     default:
+                        // Handle any other keys, if needed
                         break;
                 }
             }
 
-            profile = new Profile(name, age, email, phone);
+            return new Profile(name, age, email, phone);
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
-        return profile;
+        return null; // Return null if an exception occurs
     }
 }
